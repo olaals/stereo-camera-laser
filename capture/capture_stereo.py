@@ -5,6 +5,7 @@ import os
 from genicam_wrappers import GenicamStereo
 
 
+
 def capture_stereo(save_dir, cti_path, dn_left, dn_right, exposure_time, gray=True):
     cap = GenicamStereo(cti_path, dn_left, dn_right, exposure_time, gray=True)
     save_num = 0
@@ -29,10 +30,11 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--save_dir', type=str, default='data')
+    parser.add_argument('--exp_time', type=int, default=60000)
     args = parser.parse_args()
 
     cti_path = "/opt/cvb-13.04.001/drivers/genicam/libGevTL.cti.1.2305"
-    exposure_time = 60000
+    exposure_time = args.exp_time
     device_num_left = 1
     device_num_right = 0
     capture_stereo(args.save_dir, cti_path, device_num_left, device_num_right, exposure_time)

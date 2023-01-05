@@ -43,8 +43,8 @@ def create_printable_aruco_grid(aruco_dict_str, px_width, squares_x,squares_y, s
         "aruco_dict_str":aruco_dict_str,
         "square_x":squares_x,
         "square_y":squares_y,
-        "cb_sq_width":ch_board_sq_size,
-        "aruco_sq_width":aruko_size,
+        "cb_sq_width":ch_board_sq_size/1000.0,
+        "aruco_sq_width":aruko_size/1000.0,
         "start_id":start_id,
     }
     return img, aruco_board_dict
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         os.makedirs(board_save_dir)
     cv2.imwrite(os.path.join(board_save_dir, "board.png"), img)
     # save as json
-    with open(os.path.join(board_save_dir, "board_dict.json"), "w") as f:
+    with open(os.path.join(board_save_dir, "board.json"), "w") as f:
         # with nice print
         json.dump(aruco_board_dict, f, indent=4)
     print("Saving to", board_save_dir)
