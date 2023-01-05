@@ -26,7 +26,7 @@ class GenicamWrapper():
             _2d = component.data.reshape(component.height, component.width)
             debayered = cv2.cvtColor(_2d, cv2.COLOR_BAYER_RG2RGB)
             resized = cv2.resize(debayered, (component.width//2, component.width//2))
-            if gray:
+            if self.gray:
                 resized = cv2.cvtColor(resized, cv2.COLOR_RGB2GRAY)
         return resized
 
