@@ -2,7 +2,7 @@ from harvesters.core import Harvester
 import os
 import cv2
 
-class GenicamWrapper():
+class GenicamMono():
     def __init__(self, cti_path, device_num, exposure_time=30000, width=2176, height=2176, offset=968, gray=False):
         print("Initializing GenicamWrapper")
         h = Harvester()

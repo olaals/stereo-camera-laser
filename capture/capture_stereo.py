@@ -2,7 +2,7 @@ import sys
 sys.path.append('../')
 import cv2
 import os
-from genicam_wrappers import GenicamStereo
+from genicam_wrappers import GenicamStereo, GenicamMono
 
 
 
@@ -22,8 +22,12 @@ def capture_stereo(save_dir, cti_path, dn_left, dn_right, exposure_time, gray=Tr
             break
         if key & 0xFF == ord('s'):
             save_num += 1
+            if gray:
+                left = cv2.cvtColor(left, cv2.COLOR_GRAY2BGR)
+                right = cv2.cvtColor(right, cv2.COLOR_GRAY2BGR)
             cv2.imwrite(left_save_dir+f'img{format(save_num, "02d")}.png', left)
             cv2.imwrite(right_save_dir+f'img{format(save_num, "02d")}.png', right)
+
 
 
 if __name__ == '__main__':

@@ -16,11 +16,24 @@ def save_json(filename, data):
 
 
 def calib_left_right(calib_dir):
-    left_paths = glob.glob(os.path.join(calib_dir, 'board-imgs','left', '*.png'))
-    right_paths = glob.glob(os.path.join(calib_dir, 'board-imgs','right', '*.png'))
-    print('Found {} left images and {} right images'.format(len(left_paths), len(right_paths)))
+    left_calib_paths = glob.glob(os.path.join(calib_dir, 'cam-calib','left', '*.png'))
+    right_calib_paths = glob.glob(os.path.join(calib_dir, 'cam-calib','right', '*.png'))
+    left_stereo_paths = glob.glob(os.path.join(calib_dir, 'stereo-calib','left', '*.png'))
+    right_stereo_paths = glob.glob(os.path.join(calib_dir, 'stereo-calib','right', '*.png'))
+    left_stereo_paths.sort()
+    right_stereo_paths.sort()
+    left_calib_paths.sort()
+    right_calib_paths.sort()
     board = rv.cv.calib.load_charuco_board(os.path.join(calib_dir, 'board.json'))
-    ltr, lK, ldc, rK, rdc = rv.cv.calib.calibrate_stereo_charuco(left_paths, right_paths, board)
+    print("Left calib paths", left_calib_paths)
+    print("Right calib paths", right_calib_paths)
+    lK, ldc, l_rms = rv.cv.calib.calibrate_camera(left_calib_paths, board, req_markers=10, verbose=0)
+    rK, rdc, r_rms = rv.cv.calib.calibrate_camera(right_calib_paths, board, req_markers=10, verbose=0)
+    print("Left cam mat", lK)
+    print("Right cam mat", rK)
+    print("Root mean square error for left camera: {}".format(l_rms))
+    print("Root mean square error for right camera: {}".format(r_rms))
+    ltr, ltr_dev_angle= rv.cv.calib.calibrate_stereo_charuco(left_stereo_paths, right_stereo_paths, lK, ldc, rK, rdc, board, 1)
     print('Left camera matrix: {}'.format(lK))
     print('Left distortion: {}'.format(ldc))
     print('Right camera matrix: {}'.format(rK))
@@ -36,6 +49,9 @@ def calib_left_right(calib_dir):
         'right_K': rK.tolist(),
         'right_dist': rdc.tolist(),
         'T_ltr': ltr.tolist(),
+        "#debug_rms_left": l_rms,
+        "#debug_rms_right": r_rms,
+        "#debug_ltr_mean_dev_angle": ltr_dev_angle,
     }
     save_json(os.path.join(calib_dir, 'calib.json'), calib_dict)
 
