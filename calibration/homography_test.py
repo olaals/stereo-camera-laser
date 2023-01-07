@@ -31,6 +31,35 @@ def apply_planar_homography(H, img):
     return projected_img
 
 
+def combine_4_images_to_2by2grid(img1, img2, img3, img4):
+    # if gray convert to rgb and resize to 256x256
+    if len(img1.shape) == 2:
+        img1 = cv2.cvtColor(img1, cv2.COLOR_GRAY2RGB)
+    if len(img2.shape) == 2:
+        img2 = cv2.cvtColor(img2, cv2.COLOR_GRAY2RGB)
+    if len(img3.shape) == 2:
+        img3 = cv2.cvtColor(img3, cv2.COLOR_GRAY2RGB)
+    if len(img4.shape) == 2:
+        img4 = cv2.cvtColor(img4, cv2.COLOR_GRAY2RGB)
+
+    # combine images to 2 by 2 grid with image size 512x512
+    img1 = cv2.resize(img1, (256, 256))
+    img2 = cv2.resize(img2, (256, 256))
+    img3 = cv2.resize(img3, (256, 256))
+    img4 = cv2.resize(img4, (256, 256))
+    img1 = cv2.copyMakeBorder(img1, 0, 256, 0, 256, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+    img2 = cv2.copyMakeBorder(img2, 0, 256, 256, 0, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+    img3 = cv2.copyMakeBorder(img3, 256, 0, 0, 256, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+    img4 = cv2.copyMakeBorder(img4, 256, 0, 256, 0, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+    img = cv2.vconcat([img1, img3])
+    img = cv2.hconcat([img, img2])
+    img = cv2.hconcat([img, img4])
+    return img
+
+
+
+
+
 def test_homography(calib_dir):
     calib_json_path = os.path.join(calib_dir, 'calib.json')
     with open(calib_json_path, 'r') as f:
@@ -53,9 +82,25 @@ def test_homography(calib_dir):
         undist_left = cv2.undistort(left_img, lK, ldc)
         projected = apply_planar_homography(H, undist_right)
         # depth stack images to rgb
+
+
         depth_stack = np.dstack((undist_left, projected, projected))
-        cv2.imshow('depth stack', depth_stack)
-        cv2.waitKey(0)
+
+        # 2x2 matplotlib grid
+        fig, axs = plt.subplots(2, 2)
+        axs[0, 0].imshow(undist_left, cmap='gray')
+        axs[0, 0].set_title('Left')
+        axs[0, 1].imshow(undist_right, cmap='gray')
+        axs[0, 1].set_title('Right')
+        axs[1, 0].imshow(projected, cmap='gray')
+        axs[1, 0].set_title('Projected')
+        axs[1, 1].imshow(depth_stack)
+        axs[1, 1].set_title('Depth Stack')
+        plt.show()
+
+
+
+
 
 
 

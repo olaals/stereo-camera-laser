@@ -60,13 +60,7 @@ def calib_stereo_laser(calib_dir, verbose=1):
     for left_img_path, right_img_path in zip(left_laser_img_paths, right_laser_img_paths):
         left_img = cv2.imread(left_img_path, 0)
         right_img = cv2.imread(right_img_path, 0)
-        left_img = np.where(left_img>20, left_img, 0)
-        right_img = np.where(left_img>20, left_img, 0)
-        # show imgs
-        #cv2.imshow('left', left_img)
-        #cv2.imshow('right', right_img)
-        #cv2.waitKey(0)
-        laser_pts = rv.cv.laser.triangulate_laser_lines(left_img, right_img, 20, T_ltr[:3,:3], T_ltr[:3,-1], lK, ldc, rK, rdc, verbose=verbose)
+        laser_pts = rv.cv.laser.triangulate_laser_lines(left_img, right_img, 50, T_ltr[:3,:3], T_ltr[:3,-1], lK, ldc, rK, rdc, verbose=verbose)
         if len(laser_pts) > 0:
             all_pts.append(laser_pts)
 

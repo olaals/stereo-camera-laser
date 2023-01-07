@@ -25,9 +25,13 @@ def calib_left_right(calib_dir):
     left_calib_paths.sort()
     right_calib_paths.sort()
     board = rv.cv.calib.load_charuco_board(os.path.join(calib_dir, 'board.json'))
+    print(board.getSquareLength())
+    print(board.getMarkerLength())
+
     print("Left calib paths", left_calib_paths)
     print("Right calib paths", right_calib_paths)
-    lK, ldc, l_rms = rv.cv.calib.calibrate_camera(left_calib_paths, board, req_markers=10, verbose=0)
+
+    lK, ldc, l_rms = rv.cv.calib.calibrate_camera(left_calib_paths, board, req_markers=10, verbose=1)
     rK, rdc, r_rms = rv.cv.calib.calibrate_camera(right_calib_paths, board, req_markers=10, verbose=0)
     print("Left cam mat", lK)
     print("Right cam mat", rK)
