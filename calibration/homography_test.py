@@ -73,7 +73,7 @@ def test_homography(calib_dir):
     print("T_ltr", T_ltr.shape)
 
     left_laser_img_paths = glob.glob(os.path.join(calib_dir, 'laser-calib','left', '*.png'))
-    right_laser_img_paths = glob.glob(os.path.join(calib_dir, 'laser-calib','right', '*.png'))
+    right_laser_img_paths = glob.glob(os.path.join(calib_dir, 'laser-calib', 'right', '*.png'))
     print('Found {} left laser images and {} right laser images'.format(len(left_laser_img_paths), len(right_laser_img_paths)))
     for left_img_path, right_img_path in zip(left_laser_img_paths, right_laser_img_paths):
         left_img = cv2.imread(left_img_path, 0)
@@ -93,9 +93,9 @@ def test_homography(calib_dir):
         axs[0, 1].imshow(undist_right, cmap='gray')
         axs[0, 1].set_title('Right')
         axs[1, 0].imshow(projected, cmap='gray')
-        axs[1, 0].set_title('Projected')
+        axs[1, 0].set_title('Right projected to left')
         axs[1, 1].imshow(depth_stack)
-        axs[1, 1].set_title('Depth Stack')
+        axs[1, 1].set_title('Left(red) + projected(cyan)')
         plt.show()
 
 

@@ -28,7 +28,7 @@ def capture(save_dir, cti_path, device_num, exposure_time, gray=True):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--save_dir', type=str, default='data')
+    parser.add_argument('--save_dir', type=str)
     parser.add_argument('--device_num', type=int)
     parser.add_argument('--exp_time', type=int, default=60000)
     args = parser.parse_args()

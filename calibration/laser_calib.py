@@ -40,11 +40,12 @@ def get_proj_planar_homography(T12, u1, K1, K2):
     print("min term shape", min_term.shape)
     H21 = R_21 - min_term
     H21 = K2@H21@np.linalg.inv(K1)
-    #H12 = np.linalg.inv(H21)
+    H12 = np.linalg.inv(H21)
 
-    return H21
+    return H12
 
 def calib_stereo_laser(calib_dir, verbose=1):
+    THRESH = 150
     calib_json_path = os.path.join(calib_dir, 'calib.json')
     with open(calib_json_path, 'r') as f:
         calib_dict = json.load(f)
@@ -60,7 +61,7 @@ def calib_stereo_laser(calib_dir, verbose=1):
     for left_img_path, right_img_path in zip(left_laser_img_paths, right_laser_img_paths):
         left_img = cv2.imread(left_img_path, 0)
         right_img = cv2.imread(right_img_path, 0)
-        laser_pts = rv.cv.laser.triangulate_laser_lines(left_img, right_img, 50, T_ltr[:3,:3], T_ltr[:3,-1], lK, ldc, rK, rdc, verbose=verbose)
+        laser_pts = rv.cv.laser.triangulate_laser_lines(left_img, right_img, THRESH, T_ltr[:3,:3], T_ltr[:3,-1], lK, ldc, rK, rdc, verbose=verbose)
         if len(laser_pts) > 0:
             all_pts.append(laser_pts)
 
@@ -80,6 +81,7 @@ def calib_stereo_laser(calib_dir, verbose=1):
 
     # plot 3d points
     if verbose > -1:
+        print("Avg plane error", avg_plane_error)
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         max_range = np.array([all_pts[:,0].max()-all_pts[:,0].min(), all_pts[:,1].max()-all_pts[:,1].min(), all_pts[:,2].max()-all_pts[:,2].min()]).max() / 2.0
@@ -89,7 +91,9 @@ def calib_stereo_laser(calib_dir, verbose=1):
         ax.set_xlim(mid_x - max_range, mid_x + max_range)
         ax.set_ylim(mid_y - max_range, mid_y + max_range)
         ax.set_zlim(mid_z - max_range, mid_z + max_range)
-        ax.scatter(all_pts[:,0], all_pts[:,1], all_pts[:,2], c='r', marker='o')
+        # scatter small points
+        ax.scatter(all_pts[:,0], all_pts[:,1], all_pts[:,2], s=0.01, c='r', marker='o')
+        #ax.scatter(all_pts[:,0], all_pts[:,1], all_pts[:,2], c='r', marker='o')
         # draw plane on top of points
         x = np.linspace(all_pts[:,0].min(), all_pts[:,0].max(), 100)
         y = np.linspace(all_pts[:,1].min(), all_pts[:,1].max(), 100)
