@@ -75,3 +75,16 @@ python laser_calib.py calib_dir
 ```
 The script will show the triangulated pairs of images of the laser lie on a plane
 ![laser-calib-plane](docs/laser-calib-plane.jpg)
+
+## Calibration result
+The calibration result is stored in [calib.json](calibration/calib-05-01/calib.json), with 
+```bash
+left_K: Left camera matrix
+left_dist: Left distortion coefficients
+right_K: Right camera matrix
+right_dist: Right distortion coefficients
+T_ltr: Transformation left to right (transforms point from the right frame to the left frame)
+H: Homography that transforms points from the right image to the left image.
+u: 4 parameter description of a plane u = [n -d] where n is the normal and d the distance to the plane
+
+```
