@@ -23,6 +23,7 @@ python create_charuco_board.py
 For more options for the aruco_dict_str see [OpenCV docs](https://docs.opencv.org/3.4/d9/d6a/group__aruco.html#ggac84398a9ed9dd01306592dd616c2c975a6eb1a3e9c94c7123d8b1904a57193f16) 
 
 ### Capture images with each camera
+![Cam-calib-images](docs/cam-calib-images.jpg)
 Capture a 15-25 images of the charuco board with each camera and place the images from the left and right camera in 
 directories like [cam-calib](calibration/calib-05-01/cam-calib). The images will be used to calibrate the camera matrix and distortion coefficients of each camera seperately.
 
@@ -66,3 +67,4 @@ calib_dir
 
 
 ## Laser calibration
+To calibrate the laser, attach the bandpass filter to the cameras such that only the light from the laser is visible. Find a planar surface and capture 10-20 images where the laser line is visible from both cameras. It is important that the laser line is a straight line in all images. 
