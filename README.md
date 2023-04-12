@@ -69,3 +69,8 @@ calib_dir
 ## Laser calibration
 ![Laser-calib-images](docs/laser-calib.jpg)
 To calibrate the laser, attach the bandpass filter to the cameras such that only the light from the laser is visible. Find a planar surface and capture 10-20 images where the laser line is visible from both cameras. It is important that the laser line is a straight line in all images. 
+
+```bash
+python laser_calib.py calib_dir
+```
+![laser-calib-plane](docs/laser-calib-plane.jpg)
