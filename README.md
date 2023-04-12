@@ -29,6 +29,39 @@ directories like [cam-calib](calibration/calib-05-01/cam-calib). The images will
 ### Capture images simultaniously with both cameras
 Capture 5-10 images with both cameras simultaniously with the charuco board visible from both cameras like in [stereo-calib](calibration/calib-05-01/stereo-calib). The images will be used to calibrate the rotation and translation between each camera.
 
+### Run the calibration script
+To calibrate both the individual cameras and the transformation between them run [stereo_calib.py](calibration/stereo_calib.py)
+```bash
+python stereo_calib.py calib_dir
+```
+where the calib_dir have the following file structure
+```bash
+calib_dir
+├── board.json
+├── board.png
+├── cam-calib
+│    ├── left
+│    │  ├── img01
+│    │  ├── img02
+│    │  └── ...
+│    └── right
+│       ├── img01
+│       ├── img02
+│       └── ...
+│
+└── stereo-calib
+    ├── left
+    │   ├── img01
+    │   ├── img02
+	│   └── ...
+    └── right
+        ├── img01
+        ├── img02
+        └── ...
+---
+```
+
+
 
 
 
